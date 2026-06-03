@@ -1,0 +1,120 @@
+<html>
+    <body>
+        <canvas id="snake"></canvas>
+            <script>
+                let w=5;
+                const canvas = document.getElementById("snake");
+                let ctx = canvas.getContext("2d")
+                const keys = {};
+
+window.addEventListener("keydown", (e) => {
+    keys[e.key] = true;
+});
+
+window.addEventListener("keyup",(e)=>{keys[e.key] = false;});
+
+let seg = [];
+for(let i=0; i<4; i++){
+    seg.push({ x: 200 - i*w,
+                y: 200 
+            });
+}
+let hx=30
+let hy=20
+h = w
+
+let bx=30
+let by=30
+
+let di = 1 // 1 - up     2 - down     3 - left     4 - right
+
+function gameloop(){
+    ctx.fillStyle="#000000"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    if (keys["ArrowUp"]){
+                if(di!==2){
+                    di = 1
+                }
+                
+            }
+            if (keys["ArrowDown"]){
+                if(di!==1){
+                    di = 2
+                }
+            }
+            if (keys["ArrowRight"]){
+                if(di!==3){
+                    di = 4
+                }
+            }
+            if (keys["ArrowLeft"]){
+                if(di!==4){
+                    di = 3
+                }
+            }
+
+            if(di===1){
+                hy=hy-h
+            }
+            if(di===2){
+                hy=hy+h
+            }
+            if(di===3){
+                hx=hx-w
+            }
+            if(di===4){
+                hx=hx+w
+            }
+
+            if (hx === bx && hy ===by){
+                bx = Math.floor(Math.random()*20)*w
+                by = Math.floor(Math.random()*20)*w
+            }
+            else{
+                seg.pop()
+            }
+            for(let i of seg){
+                if(i["x"]===hx && i["y"]===hy){
+                    seg = [];
+                    for(let i=0; i<4; i++){
+                        seg.push({ x: 20 - i*w,
+                                    y: 20 
+                                });
+                    }
+                    hx=20
+                    hy=20
+
+                    bx=30
+                    by=30
+
+                    di = 1 // 1 - up     2 - down     3 - left     4 - right
+
+                    menu=0
+
+                    score=0
+                }
+            }
+            seg.reverse()
+            seg.push({
+                "x":hx,
+                "y":hy
+            })
+            seg.reverse()
+            
+for(let i of seg){
+                ctx.fillStyle="#00ff00"
+                ctx.fillRect(i["x"], i["y"], w, h)
+            }
+            ctx.fillStyle="#ff0000"
+            ctx.fillRect(bx, by, w, h)
+
+    setTimeout(() => {
+        requestAnimationFrame(gameloop);
+    }, 100);
+}
+gameloop()
+            </script>
+
+    </body>
+</html>
